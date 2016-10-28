@@ -1,2 +1,2 @@
 # web-fe
-alert('hello world')
+'hello world'
