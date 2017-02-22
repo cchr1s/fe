@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- saved from url=(0023)http://www.contoso.com/ --> 
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+	<title>左侧导航</title>
+<style>
+	*{
+		font-family:"Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, "Microsoft YaHei";
+		font-size:12px;
+	}
+
+	body{
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+	a{
+		text-decoration:none;
+	}
+	ul{
+		list-style: none;
+ 		padding: 0;
+		margin: 0;
+	 }
+
+	.sidebar{
+	 	width: 180px;
+	 	position: fixed;
+	 	top: 0;
+	 	bottom: 0;
+	 	background-color: #293038;
+	 	overflow-x: hidden;
+	 	z-index: 1;
+	}
+
+	.sidebar span{
+	    text-rendering: optimizeLegibility;
+    	-webkit-font-smoothing: antialiased;
+    	letter-spacing: 0.02em;
+	}
+
+	.sidebar-nav .sidebar-content{
+	 	width: 180px;
+	 	height: 100%;
+	 	overflow: auto;
+	 	overflow-x: hidden;
+	 	overflow-y: hidden;
+	}
+
+	.scope{
+	 	box-sizing: border-box;
+	 	color: #333;
+	 	line-height: 1.4285;
+	}
+
+	.sidebar-fold{
+	    height: 30px;
+	    width: 180px;
+	    background: #4A5064;
+	    color: #aeb9c2;
+	    text-align: center;
+	    line-height: 30px !important;
+	    font-size: 12px;
+	    user-select: none;
+	    cursor: pointer;
+	    -webkit-user-select: none;
+	}
+	
+	.sidebar-fold span{
+		display: inline-block;
+		transform: rotate(90deg);
+	}
+	
+	.sidebar-fold span.hidden{    
+    	display: inline-block;
+    	transform: rotate(180deg);
+	}
+
+	.sidebar-nav{
+		height: 40px;
+	    background: #42485B;
+	    position: relative;
+	    cursor: pointer;
+	    -webkit-user-select: none;
+	    -moz-user-select: none;
+	}
+
+	.sidebar-nav .sidebar-title{
+		height:40px;
+	    background: #42485B;
+	    color: #fff;
+	    line-height: 40px;
+	    position: relative;
+	    cursor: pointer;
+	}
+	
+	.sidebar-nav .sidebar-title:hover{
+		background-color: #00c1de;
+	}
+
+	.sidebar-title-inner{
+		height: 40px;
+	}
+	.sidebar-title-icon{
+		display: inline-block;
+	    margin: -2px 8px 0 20px;
+	    vertical-align: middle;
+	    transition: transform 0.12s;
+	    -o-transition: -o-transform 0.12s;
+	    -ms-transition: -ms-transform 0.12s;
+	    -moz-transition: -moz-transform 0.12s;
+	    -webkit-transition: -webkit-transform 0.12s;
+	    transform: rotate(-135deg);
+	}
+
+	.sidebar-nav-active .sidebar-title-icon{
+    	transform: rotate(-45deg);
+	}
+	
+	.sidebar-nav .sidebar-title-text{
+		color: #fff;
+    	line-height: 40px;
+	}
+
+	.sidebar .siderbar-trans{
+	    width: 200px;
+	    margin: 0;
+	    padding: 0;
+	    list-style: none;
+	    overflow-y: scroll;
+	    overflow-x: hidden;
+	}
+
+	.sidebar li{
+		text-rendering: optimizeLegibility;
+    	-webkit-font-smoothing: antialiased;
+    	letter-spacing: 0.02em;
+	}
+
+	.sidebar .sidebar-trans .nav-item{
+		position: relative;	
+	}
+
+	.sidebar .sidebar-trans .nav-item:hover{
+		background-color: #4A5064 !important;
+	}
+
+    .sidebar .sidebar-trans .nav-item-active:hover{
+		background-color: #00c1de !important;
+	}
+
+	.sidebar .sidebar-nav li .nav-icon{
+	    position: absolute;
+	    color: white;
+	    font-size: 20px;
+	    left: 13px;
+	    line-height: 40px;
+	}
+/* 	.sidebar .sidebar-nav li:first-child .nav-icon{
+	font-size: 23px;
+} */
+
+	.sidebar .sidebar-nav li a{
+		display: block;
+	    width: 180px;
+	    height: 40px;
+	    line-height: 40px;
+	    overflow: hidden;
+	    color: #fff;
+	    padding-left: 50px;
+	}
+
+	.sidebar .sidebar-nav li .active a{
+		background-color: #00c1de;
+		transition: none;
+		-webkit-transition: none;
+	}
+
+
+	.product{
+	    width: auto;
+	    position: absolute;
+	    top: 0px;
+	    left: -130px;
+	    bottom: 0px;
+	    right: 0px;
+	    overflow: hidden;
+	    background: #FFF;
+	    /* left: 180px; */
+	     z-index: -1;
+	}
+	
+	.product-navbar{
+		width: 180px;
+		float: left;
+	    background-color: #EAEDF1;
+	    position: absolute;
+	    top: 0px;
+	    bottom: 0px;
+	    z-index: 2;
+	    overflow: hidden;
+	    -o-transition: all 0.2s ease;
+	    -ms-transition: all 0.2s ease;
+	    -moz-transition: all 0.2s ease;
+	    -webkit-transition: all 0.2s ease;
+	}
+
+	.product-nav-stage{
+		width: 180px;
+	    overflow: hidden;
+	    position: absolute;
+	    top: 0px;
+	    bottom: 0px;
+	    right: 0px;
+	}
+
+	.product-navbar .product-nav-title{
+	    width: 180px;
+	    height: 70px;
+	    line-height: 70px;
+	    background: #D9DEE4;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	}
+
+	.product-navbar  .product-nav-title {
+	    font-weight: bold;
+	    text-indent: 20px;
+	}
+
+	.product-navbar .product-nav-list{
+		position: absolute;
+	    top: 70px;
+	    left: 0px;
+	    right: 0px;
+	    bottom: 0px;
+	    overflow-y: auto;
+	    overflow-x: hidden;
+	}
+
+	.product-navbar .product-nav-list .product-nav-scope{
+		width: 180px;
+	    height: 40px;
+	    line-height: 40px;
+	    display: block;
+	    color: #333;
+	}
+
+	.product-navbar .product-nav-list li:hover{
+		background-color: #f4f6f8;
+	}
+	/* .product-navbar .product-nav-list li:first-child{ 
+	    background-color: #fff;
+	} */
+	.product-navbar .product-nav-list ul .active{
+	    background-color: #fff;
+	}
+   	.product-navbar .product-nav-list ul .active:hover{
+	    background-color: #fff;
+	}
+	.product-navbar .product-nav-list .nav-icon{
+		width: 30px;
+	    height: 40px;
+	    float: left;
+	    text-align: center;
+	    font-size: 16px;
+	    color: #333;
+	}
+
+	.product-navbar .product-nav-list .nav-title {
+	    width: 138px;
+	    float: left;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	}
+
+	.product .product-navbar-collapse{
+	    position: absolute;
+	    top: 50%;
+	    /* width: 20px; */
+	    height: 26px;
+	   	z-index: 3;
+	    left: 167px;
+	    border-bottom: 9px solid transparent;
+	    border-left: none;
+	    border-right: 13px solid #f7f7f7;
+	    border-top: 9px solid transparent;
+	}
+	.product .product-navbar-collapse:hover{
+		border-right: 18px solid #f7f7f7;
+		left: 162px;
+		cursor: pointer;
+	}
+	.product .product-navbar-collapse .icon-collapse-left{
+	    font-size: 20px;
+		position: absolute;
+		right: -18px;
+		text-align: center;
+	}
+	
+	.product .product-navbar-collapse1{
+		position: absolute;
+	    top: 50%;
+	    /* width: 20px; */
+	    height: 26px;
+	   /*  z-index: 3; */
+	    left: 180px;
+	    border-bottom: 9px solid transparent;
+	    border-right: none;
+	    border-left: 13px solid #EAEDF1;
+	    border-top: 9px solid transparent;
+	}
+
+	.product .product-navbar-collapse1:hover{
+		border-left: 18px solid #EAEDF1;
+		cursor: pointer;
+	}
+	.product .product-navbar-collapse1 .icon-collapse-right{
+		font-size: 20px;
+		position: absolute;
+		left: -19px;
+	}
+</style>
+</head>
+<body>
+	<div>
+		<div class="sidebar">
+			<div class="sidebar-content">
+				<div class="scope">
+					<div class="sidebar-fold"><span>Ξ</span></div>
+					<div class="sidebar-nav" data-id="1">
+						<div class="sidebar-title">
+							<div class="sidebar-title-inner">
+								<span class="sidebar-title-icon">◣</span>
+								<span class="sidebar-title-text"></span>
+							</div>
+						</div>
+						<ul class="sidebar-trans">
+							<!-- active -->
+						<!-- 	<li class="nav-item" data-product-id="1">
+								<a href="#" class="siderbar-trans">
+									<span class="nav-title" >云服务器Ecs</span>
+								</a>
+							</li>  -->
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- full -->
+		<div class="product">
+			<div class="product-navbar">
+				<div class="product-nav-stage">
+					<div class="product-nav-scene">
+						<div class="product-nav-title" id="nav-title">
+						</div>
+						<div class="product-nav-list">
+							<ul>
+							<!-- active -->
+								<!-- <li id="product-nav-info">
+									<div>
+										<a href="http://www.sina.com" target="product-show" class="product-nav-scope">
+											<div class="nav-icon"></div>
+											<div class="nav-title">概览</div>
+										</a>
+									</div>
+								</li> -->
+							</ul>
+						</div>						
+					</div>
+				</div>
+			</div>
+			<div class="product-navbar-collapse">
+				<span class="icon-collapse-left">&nbsp;«&nbsp;</span>
+				<!-- <span class="icon-collapse-right">&nbsp;»&nbsp;</span> -->
+			</div>
+			<div class="product-navbar-collapse1">
+				<span class="icon-collapse-right">&nbsp;»&nbsp;</span>
+			</div>
+			<div class="product-show" style="height:100%;">
+				<iframe src="" frameborder="0" name="product-show" height="100%" width="100%" scrolling="yes"></iframe>
+			</div>
+		</div>
+	</div>
+
+	<!-- <script type="text/javascript" src='jquery.min.js'></script> -->
+	<script type="text/javascript" src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+	<script>
+	(function(){
+		//定义目录信息
+		//sidebar_title: 大标题
+		//navbar_tilte: 展开信息，
+		//	nav_icon: 小图标（特殊符号）
+		//	nav_title: 二级下拉菜单标题
+		//	product_tilte: 三级展开菜单
+		//		name: 三级展开菜单名称
+		//		link：三级展开菜单链接
+		var nav = [{
+					'sidebar_title': '云计算基础服务',
+					'navbar_title': [{
+						'nav_icon': ['✪','❉','✿','♨','♔'],
+						'nav_title': ['云数据库', '云服务器Ecs','负载均衡','云数据库redis','云数据库MongoDB'],
+						'product_title': [{
+							'name': ['概览', '实例', '磁盘', '快照'],
+							'link': ['http://www.xinhuanet.com', 'http://www.qq.com', 'http://www.sina.com']
+						},{
+							'name': ['概2览', '实1例', '磁盘221', '快照2'],
+							'link': ['http://www.xinhuanet.com', 'http://www.qq.com', 'http://www.sina.com']
+						},{
+							'name': ['概333览', '实1例', '磁33盘1'],
+							'link': ['http://www.xinhuanet.com', 'http://www.qq.com', 'http://www.sina.com']
+						},{
+							'name': ['概44览', '实144例', '磁盘441', '快照2'],
+							'link': ['http://www.xinhuanet.com', 'http://www.qq.com', 'http://www.sina.com']
+						},{
+							'name': ['概5552览', '实1555例', '磁555盘1', '快照2','guygyugyu'],
+							'link': ['http://www.xinhuanet.com', 'http://www.qq.com', 'http://www.sina.com']
+						}]
+					}]
+				}, {
+					"sidebar_title": "大数据（数加）",
+					'navbar_title': [{
+						'nav_icon': ['✪', '❃','✤','♙','❈','✿','❁'],
+						'nav_title': ['数加控制台概览', '大数据开发套件', 'Quick BI', '机器学习', '推荐引擎', '公众趋势分析', 'DataV数据可视化'],
+						'product_title': [{
+							'name': ['大数据', '大数据例', '大数据盘', '快照'],
+							'link': ['http://www.xinhuanet.com', 'http://www.qq.com', 'http://www.sina.com']
+						},{
+							'name': ['大数2222', '实大数222据', '磁222盘1', '快22照2'],
+							'link': ['http://www.xinhuanet.com', 'http://www.qq.com', 'http://www.sina.com']
+						},{
+							'name': ['大数33333', '实大3据', '3盘1', '快32'],
+							'link': ['http://www.xinhuanet.com', 'http://www.qq.com', 'http://www.sina.com', 'http://www.youku.com']
+						}]
+					}]
+				}, {
+					"sidebar_title": "安全（云盾）",
+					'navbar_title': [{
+						'nav_icon': ['✪', '✥','✤','☂','❈','✿','✲','✣','☀'],
+						'nav_title': ['云盾控制台概览', '态势感知', '服务器安全（安骑士）', 'ddos防护', 'Web应用防火墙', '先知（安全情报）', '安全管家','加密服务','绿网'],
+						'product_title': [{
+							'name': ['云盾1据', '大云1盾', '大云盾111', '云盾11照'],
+							'link': ['http://www.xinhuanet.com', 'http://www.qq.com', 'http://www.sina.com','http://www.sohu.com']
+						},{
+							'name': ['大数2222', '实大数222据', '磁222盘1', '快22照2'],
+							'link': ['http://www.xinhuanet.com', 'http://www.qq.com', 'http://www.sina.com']
+						},{
+							'name': ['服务器', '实服务器据', '3服务器', '服务器2'],
+							'link': ['http://www.xinhuanet.com', 'http://www.qq.com', 'http://www.sina.com', 'http://www.youku.com']
+						}]
+					}]
+				}]
+
+		//调用添加		
+		addSidebar_nav(nav.length)
+
+		//点击事件
+		$('.sidebar-fold').on('click', function(){
+			if($(this).find('span').hasClass('hidden')){
+				$(this).find('span').removeClass('hidden')
+				$('.sidebar').css('width','180px');
+				$('.sidebar-fold').css('width','180px')
+				$('.sidebar-title-text').show();
+				if ($('.sidebar-nav').hasClass('sidebar-nav-active') && $('.sidebar-trans .nav-item').hasClass('nav-item-active')) {
+					$('.product').css('left','180px');
+				}
+				$('.product-navbar-collapse1').css('display','none');
+				$('.product-navbar-collapse').css('display','block');
+
+			}else{
+				$(this).find('span').addClass('hidden')
+				$('.sidebar').css('width','50px');
+				$('.sidebar-fold').css('width','50px')
+				$('.sidebar-title-text').hide();
+				$('.product').css('left','-130px')
+				if ($('.sidebar-nav').hasClass('sidebar-nav-active') && $('.sidebar-trans .nav-item').hasClass('nav-item-active')) {
+					$('.product').css('left','50px');
+				}
+
+				$('.product-navbar-collapse1').css('display','none');
+				$('.product-navbar-collapse').css('display','block');
+			}
+		})
+
+		$('.sidebar-nav .sidebar-trans').hide()
+		$('.product .product-navbar-collapse1').hide()
+		$('.sidebar-nav').on('click', function(e){
+			id = $(this).attr('data-id')
+			var length = nav[id-1].navbar_title[0].nav_title.length;
+
+			if ($(this).hasClass('sidebar-nav-active')) {
+				$(this).siblings().removeClass('sidebar-nav-active')
+				$(this).removeClass('sidebar-nav-active')
+				$(this).find('.sidebar-trans').hide()
+				$(this).css('margin-bottom', 0)
+
+			}else{
+				$(this).addClass('sidebar-nav-active')
+				$(this).siblings().removeClass('sidebar-nav-active')
+				$(this).find('.sidebar-trans').show()
+				$(this).siblings().find('ul').hide()
+				$(this).css('margin-bottom', length * 40 + 'px');
+				$(this).siblings().css('margin-bottom', '0px');	
+			}
+
+			e.stopPropagation()
+		})
+		
+		$('.sidebar .sidebar-trans .nav-item').on('click', function(e){
+			$(this).css('background-color','#00c1de');
+			$(this).siblings().css('background-color', '#293038');
+
+			$(this).addClass('nav-item-active');
+			$('.product .product-nav-list li:first').addClass('active')
+			if ($(this).hasClass('nav-item-active')) {
+				$(this).siblings().removeClass('nav-item-active');
+				$(this).parents().siblings().find('ul li').removeClass('nav-item-active');
+				$(this).parents().siblings().find('.nav-item').css('background-color', '#293038');
+
+				if($('.sidebar-fold').find('span').hasClass('hidden')){
+					$('.product').css('left','50px')
+					$('.product-navbar-collapse1').css('display','none');
+					$('.product-navbar-collapse').css('display','block');
+				}else{
+					$('.product').css('left','180px');
+
+				}				
+
+				$("#nav-title").text($(this).find('.nav-title').text());
+				var data_product_id = $(this).attr('data-product-id');
+				var length = nav[id - 1].navbar_title[0].product_title[data_product_id-1].name.length;
+				var inner = "";
+				for(i = 0; i < length;i++){
+					inner += '<li><div><a href=' + nav[id - 1].navbar_title[0].product_title[data_product_id-1].link[i] +' target="product-show" class="product-nav-scope"><div class="nav-icon"></div><div class="nav-title">' + nav[id - 1].navbar_title[0].product_title[data_product_id-1].name[i] + '</div></a></div></li>'
+					$('.product-nav-list').find('ul').html(inner);
+				}
+
+				$('.product-navbar .product-nav-list li').on('click', function(e){
+					$(this).addClass('active');
+					if ($(this).hasClass('active')) {
+						$(this).siblings().removeClass('active')
+					}
+
+					e.stopPropagation();
+				})	
+			}
+
+			e.stopPropagation()
+		})
+
+		$('.product .product-navbar-collapse').on('click', function(){
+			if($('.sidebar-fold').find('span').hasClass('hidden')){
+				$('.product').css('left', '-130px')
+			}else{
+				$('.product').css('left', '0px')
+			}	
+			$('.product .product-navbar-collapse').hide()
+			$('.product .product-navbar-collapse1').fadeIn(500)
+		})
+
+		$('.product .product-navbar-collapse1').on('click', function(){
+			if($('.sidebar-fold').find('span').hasClass('hidden')){
+				$('.product').css('left', '50px')
+			}else{
+				$('.product').css('left', '180px')
+			}
+			$('.product .product-navbar-collapse').fadeIn(500)
+			$('.product .product-navbar-collapse1').hide()
+		})
+
+		//动态添加
+		function addSidebar_nav(item){
+			//var inner = "";
+			for(i = 0; i < item-1; i++){
+			//	console.log(nav.length)
+				if(item > 1){
+					$(".sidebar-nav[data-id = '1']").clone(true, true).attr('data-id', i-222).insertAfter(".sidebar-nav[data-id = 1]")
+				}
+
+				/*inner += '<div class="sidebar-nav" data-id='+(i+1)+'><div class="sidebar-title"><div class="sidebar-title-inner"><span class="sidebar-title-icon">◣</span><span class="sidebar-title-text"></span></div></div><ul class="sidebar-trans"></ul></div>'
+				$('.sidebar-fold').after(inner)*/
+			}
+
+			$('.sidebar-nav').each(function(i){
+				$(this).attr('data-id', i+1).find('.sidebar-title-text').text(nav[i].sidebar_title);
+				var length = nav[i].navbar_title[0].nav_title.length;
+				var inner = "";
+				for(var j = 0;j < length;j++){
+					inner += '<li class="nav-item" data-product-id= '+(j+1)+'><div class="nav-icon">'+nav[i].navbar_title[0].nav_icon[j]+'</div><a href="#" class="siderbar-trans"><span class="nav-title" >' +nav[i].navbar_title[0].nav_title[j]+'</span></a></li>'
+					$(this).attr('data-id', i+1).find('ul').html(inner)
+				}								
+			})	
+		}
+		
+	})()
+		
+	</script>
+</body>
+</html>
